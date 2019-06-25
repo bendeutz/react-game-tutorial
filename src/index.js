@@ -14,36 +14,40 @@ function Square(props) {
 }
 
 class Board extends React.Component {
-  renderSquare(i) {
+  createSquare(i) {
     return (
       <Square
         value={this.props.squares[i]}
         onClick={() => this.props.onClick(i)}
+        key={i}
       />
     );
   }
 
+  createBoard() {
+    let board = []
+    let index = 0
+    let row = 0
+    for (let i = 0; i < 3; i++) {
+      let children = []
+      for (let j = 0; j < 3; j++) {
+        children.push(this.createSquare(index))
+        index++
+      }
+      board.push(<div className="board-row" key={row}>
+        {children}
+      </div>)
+      row++
+    }
+    return board
+  }
 
   render() {
     return (
       <div>
-        <div className="board-row">
-          {this.renderSquare(0)}
-          {this.renderSquare(1)}
-          {this.renderSquare(2)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(3)}
-          {this.renderSquare(4)}
-          {this.renderSquare(5)}
-        </div>
-        <div className="board-row">
-          {this.renderSquare(6)}
-          {this.renderSquare(7)}
-          {this.renderSquare(8)}
-        </div>
+        {this.createBoard()}
       </div>
-    );
+    )
   }
 }
 
@@ -120,13 +124,12 @@ class Game extends React.Component {
       const desc = move ?
         'Go to move #' + move :
         'Go to game start'
-        let desc_bold
-        console.log(this.state)
-        if(this.state.stepNumber===move) {
-          desc_bold = <b>{desc}</b>  
-        } else {
-          desc_bold = desc  
-        }
+      let desc_bold
+      if (this.state.stepNumber === move) {
+        desc_bold = <b>{desc}</b>
+      } else {
+        desc_bold = desc
+      }
       return (
         <li key={move}>
           <button
@@ -145,6 +148,12 @@ class Game extends React.Component {
       status = 'Next player: ' + (this.state.xIsNext ? 'X' : 'O');
     }
 
+    let asc_desc = 
+    <button onClick = {() => console.log('das')}>
+      togglethisshit
+    </button>
+
+
     return (
       <div className="game">
         <div className="game-board">
@@ -158,6 +167,7 @@ class Game extends React.Component {
           <div>{status}</div>
           <ol>{moves}</ol>
           <ol>({currentlocation.col}, {currentlocation.row})</ol>
+          <ol>{asc_desc}</ol>
         </div>
       </div>
     );
